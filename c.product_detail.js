@@ -24,9 +24,15 @@
         })
 
         function moveX(nowPage){
-            $('.img-demo img').eq(nowPage).css('opacity','1').siblings().not('.icon_heart').css('opacity','0')
-            // 當demo的那一張(eq)圖片透明度1時，他的平輩透明度是0，但愛心的透明度不改變？
+            // $('.img-demo img').eq(nowPage).css('opacity','1').siblings().not('.icon_heart').css('opacity','0')
+            // 當demo的那一張(eq)圖片透明度1時，他的平輩透明度是0，但也是平輩的愛心透明度不改變（因為icon_heart也是那五張圖的平輩，但是它不能被調整透明度，所以將他寫在siblings之間）
+
+            $('.img-demo img').css('opacity','0').eq(nowPage).css('opacity','1')
         }
+
+        $('.icon_heart').click(function(){
+            console.log('.icon_heart clicked');
+        })
 
         $('.icon_favorite').click(function(){
             console.log('icon_heart clicked');
@@ -86,7 +92,38 @@
         
         });
 
+        // ----------------訂購數量和總額-------------------
+        // 1.按+的時候input的value++
+        // 2.按-的時候input的value-1
+        // 3.當value的值是1時，-的按鈕是灰色，且不能再向下減
+        // 4.當value的值不是1時，-的按鈕是咖啡色
+        // 5.按下購買按鈕後，會記住按過的值跳轉到結帳頁面`→記在參數/記在session傳給後端(要再寫一支PHP)/記在localstorage(結帳頁面要來localstorage)
+        
+        const minusBtn = $('button.minus');
+        const plusBtn = $('button.plus');
+        const productDiv = $('.product_q');
 
+        plusBtn.on('click', function(){
+            // 可以用function也可以用箭頭函式，用箭頭函不能用this
+            let num = +productDiv.html();
+            // +productDiv.html()→將.people裡面的文字轉換為數值，原生的用法是將.html()改成.innerText()
+            productDiv.html(num+1);
+            minusBtn.removeClass('disabled');
+        });
+
+        minusBtn.on('click', function(){
+            let num = +productDiv.html();
+            if(num>1){
+                productDiv.html(num-1);
+            }
+            num = +productDiv.html();
+            //為了知道值到底是多少，所以要呼叫num = +productDiv.html();
+            if(num===1){
+                minusBtn.addClass('disabled');
+            }
+        });
+
+        // ----------------下方列結束-------------------
 
         // 愛心變色列表頁做好了
 
